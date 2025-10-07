@@ -1,20 +1,64 @@
-
 {% extends "base.html" %}
 {% block content %}
-<div class="toolbar">
-<form method="get">
-<input type="text" name="q" placeholder="Ara..." value="{{search}}">
-<button type="submit">Ara</button>
-</form>
-</div>
-<table>
-<thead><tr>{% for c in visible_columns %}<th>{{c}}</th>{% endfor %}</tr></thead>
-<tbody>
-{% for r in rows %}
-<tr>{% for c in visible_columns %}<td>{{r[c]}}</td>{% endfor %}</tr>
-{% endfor %}
-{% if not rows %}<tr><td colspan="{{visible_columns|length}}"><em>Kayıt yok</em></td></tr>{% endif %}
-</tbody>
+<table id="jobs" class="display nowrap" style="width:100%">
+  <thead>
+    <tr>
+      {% for col in columns %}
+      <th>{{ col }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+    <tr>
+      {% for col in columns %}
+      <td>{{ row[col] }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
-<p>Toplam: {{total}} — Sayfa {{page}} / {{total_pages}}</p>
+
+<script>
+$(document).ready(function () {
+  // DataTables başlat
+  const table = $('#jobs').DataTable({
+    scrollX: true,
+    dom: 'Bfrtip',
+    buttons: [
+      {
+        extend: 'colvis',
+        text: '🧩 Kolon Seç / Gizle',
+        className: 'btn btn-light'
+      },
+      {
+        extend: 'pageLength',
+        text: 'Sayfa Boyutu'
+      }
+    ],
+    pageLength: 25,
+    language: {
+      url: "https://cdn.datatables.net/plug-ins/1.13.4/i18n/tr.json"
+    }
+  });
+
+  // Kolon görünürlüklerini localStorage'a kaydet
+  table.on('column-visibility.dt', function () {
+    const visible = [];
+    table.columns().every(function (i) {
+      visible.push(this.visible());
+    });
+    localStorage.setItem('visibleColumns', JSON.stringify(visible));
+  });
+
+  // Kaydedilmiş kolon görünürlüklerini geri yükle
+  const saved = localStorage.getItem('visibleColumns');
+  if (saved) {
+    const visible = JSON.parse(saved);
+    table.columns().every(function (i) {
+      this.visible(visible[i] ?? true);
+    });
+  }
+});
+</script>
 {% endblock %}
