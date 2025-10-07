@@ -4,46 +4,62 @@
   <meta charset="utf-8">
   <title>EGEM Job Viewer</title>
 
-  <!-- DataTables ve Buttons stilleri -->
+  <!-- Modern minimal DataTables style -->
   <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.0/css/buttons.dataTables.min.css">
-
-  <!-- jQuery & DataTables -->
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
-
-  <!-- Buttons eklentisi -->
-  <script src="https://cdn.datatables.net/buttons/3.1.0/js/dataTables.buttons.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/3.1.0/js/buttons.colVis.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.dataTables.min.css">
 
   <style>
     body {
-      font-family: system-ui, Arial, sans-serif;
-      margin: 20px;
-      background: #f4f4f4;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f8f9fb;
+      margin: 30px;
     }
     h2 {
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #222;
+    }
+    table.dataTable thead th {
+      background-color: #2b303b;
+      color: white;
+      font-weight: 600;
+    }
+    table.dataTable tbody tr:nth-child(odd) {
+      background-color: #f5f7fa;
+    }
+    table.dataTable tbody tr:hover {
+      background-color: #e9eff8;
+    }
+    .dt-buttons {
       margin-bottom: 15px;
     }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      background: white;
+    .dt-button {
+      background-color: #0078ff !important;
+      border: none !important;
+      color: white !important;
+      border-radius: 6px !important;
+      padding: 6px 12px !important;
+      font-weight: 500;
+      cursor: pointer;
+      margin-right: 6px !important;
     }
-    th, td {
+    .dt-button:hover {
+      background-color: #005fcc !important;
+    }
+    input[type="search"] {
       border: 1px solid #ccc;
-      padding: 6px;
-      font-size: 14px;
-    }
-    th {
-      background: #f0f0f0;
-    }
-    .toolbar {
-      margin-bottom: 10px;
+      border-radius: 4px;
+      padding: 4px 8px;
     }
   </style>
-</head>
 
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.colVis.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.pageLength.min.js"></script>
+</head>
 <body>
   <h2>EGEM Job Viewer</h2>
   {% block content %}{% endblock %}
