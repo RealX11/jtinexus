@@ -1,0 +1,20 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="toolbar">
+<form method="get">
+<input type="text" name="q" placeholder="Ara..." value="{{search}}">
+<button type="submit">Ara</button>
+</form>
+</div>
+<table>
+<thead><tr>{% for c in visible_columns %}<th>{{c}}</th>{% endfor %}</tr></thead>
+<tbody>
+{% for r in rows %}
+<tr>{% for c in visible_columns %}<td>{{r[c]}}</td>{% endfor %}</tr>
+{% endfor %}
+{% if not rows %}<tr><td colspan="{{visible_columns|length}}"><em>Kayıt yok</em></td></tr>{% endif %}
+</tbody>
+</table>
+<p>Toplam: {{total}} — Sayfa {{page}} / {{total_pages}}</p>
+{% endblock %}
