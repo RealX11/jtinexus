@@ -1,6 +1,14 @@
 
 import sqlite3
 
+# SQLite shim: sistemde libsqlite3 yoksa pysqlite3'ü sqlite3 olarak kullan
+try:
+    import sqlite3  # noqa: F401
+except Exception:
+    import pysqlite3 as sqlite3  # type: ignore
+    import sys
+    sys.modules["sqlite3"] = sqlite3
+
 def get_conn(db_path):
     conn = sqlite3.connect(db_path, check_same_thread=False)
     conn.row_factory = sqlite3.Row
