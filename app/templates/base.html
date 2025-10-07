@@ -1,19 +1,51 @@
-
 <!doctype html>
 <html lang="tr">
 <head>
-<meta charset="utf-8">
-<title>EGEM Job Viewer</title>
-<style>
-body{font-family:system-ui,Arial,sans-serif;margin:20px}
-table{border-collapse:collapse;width:100%}
-th,td{border:1px solid #ccc;padding:6px;font-size:14px}
-th{background:#f0f0f0}
-.toolbar{margin-bottom:10px}
-</style>
+  <meta charset="utf-8">
+  <title>EGEM Job Viewer</title>
+
+  <!-- DataTables ve Buttons stilleri -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.0/css/buttons.dataTables.min.css">
+
+  <!-- jQuery & DataTables -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+
+  <!-- Buttons eklentisi -->
+  <script src="https://cdn.datatables.net/buttons/3.1.0/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/3.1.0/js/buttons.colVis.min.js"></script>
+
+  <style>
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      margin: 20px;
+      background: #f4f4f4;
+    }
+    h2 {
+      margin-bottom: 15px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background: white;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px;
+      font-size: 14px;
+    }
+    th {
+      background: #f0f0f0;
+    }
+    .toolbar {
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
+
 <body>
-<h2>EGEM Job Viewer</h2>
-{% block content %}{% endblock %}
+  <h2>EGEM Job Viewer</h2>
+  {% block content %}{% endblock %}
 </body>
 </html>
