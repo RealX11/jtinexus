@@ -1,64 +1,86 @@
 {% extends "base.html" %}
 {% block content %}
-<table id="jobs" class="display nowrap" style="width:100%">
-  <thead>
-    <tr>
-      {% for col in columns %}
-      <th>{{ col }}</th>
+
+<div class="sticky-actions border-bottom pb-2 mb-3">
+  <form method="get" class="row g-2 align-items-end">
+    <div class="col-sm-4">
+      <label class="form-label">Ara</label>
+      <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="metin ara…">
+    </div>
+    <div class="col-sm-2">
+      <label class="form-label">Sayfa boyutu</label>
+      <select name="page_size" class="form-select">
+        {% for n in [25,50,100,200] %}
+          <option value="{{n}}" {% if page_size==n %}selected{% endif %}>{{n}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-sm-6">
+      <label class="form-label d-block">Kolonlar (Material sabit)</label>
+      <div class="d-flex flex-wrap gap-2">
+        {% for c in other_cols %}
+          <label class="form-check-label">
+            <input class="form-check-input me-1" type="checkbox" name="cols" value="{{ c }}"
+                   {% if c in visible_columns %}checked{% endif %}>
+            <span class="code">{{ c }}</span>
+          </label>
+        {% endfor %}
+      </div>
+      <div class="small text-muted mt-1">En fazla 14 ek kolon seçebilirsiniz.</div>
+    </div>
+    <div class="col-12 d-flex gap-2">
+      <button class="btn btn-primary">Uygula</button>
+      <a class="btn btn-outline-secondary" href="{{ url_for('listing.list_jobs') }}">Sıfırla</a>
+    </div>
+  </form>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-2">
+  <div class="small text-muted">Toplam <strong>{{ total }}</strong> kayıt</div>
+  <nav>
+    <ul class="pagination pagination-sm mb-0">
+      <li class="page-item {% if page==1 %}disabled{% endif %}">
+        <a class="page-link"
+           href="{{ url_for('listing.list_jobs', q=q, page=1, page_size=page_size, cols=request.args.getlist('cols')) }}">İlk</a>
+      </li>
+      <li class="page-item {% if page==1 %}disabled{% endif %}">
+        <a class="page-link"
+           href="{{ url_for('listing.list_jobs', q=q, page=page-1, page_size=page_size, cols=request.args.getlist('cols')) }}">Önceki</a>
+      </li>
+      <li class="page-item disabled"><span class="page-link">{{ page }} / {{ total_pages }}</span></li>
+      <li class="page-item {% if page==total_pages %}disabled{% endif %}">
+        <a class="page-link"
+           href="{{ url_for('listing.list_jobs', q=q, page=page+1, page_size=page_size, cols=request.args.getlist('cols')) }}">Sonraki</a>
+      </li>
+      <li class="page-item {% if page==total_pages %}disabled{% endif %}">
+        <a class="page-link"
+           href="{{ url_for('listing.list_jobs', q=q, page=total_pages, page_size=page_size, cols=request.args.getlist('cols')) }}">Son</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped table-hover table-sm align-middle">
+    <thead>
+      <tr>
+        {% for c in visible_columns %}
+          <th class="code">{{ c }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+        <tr>
+          {% for c in visible_columns %}
+            <td>{{ r[c] }}</td>
+          {% endfor %}
+        </tr>
+      {% else %}
+        <tr><td colspan="{{ visible_columns|length }}"><em>Kayıt bulunamadı.</em></td></tr>
       {% endfor %}
-    </tr>
-  </thead>
-  <tbody>
-    {% for row in rows %}
-    <tr>
-      {% for col in columns %}
-      <td>{{ row[col] }}</td>
-      {% endfor %}
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div>
 
-<script>
-$(document).ready(function () {
-  // DataTables başlat
-  const table = $('#jobs').DataTable({
-    scrollX: true,
-    dom: 'Bfrtip',
-    buttons: [
-      {
-        extend: 'colvis',
-        text: '🧩 Kolon Seç / Gizle',
-        className: 'btn btn-light'
-      },
-      {
-        extend: 'pageLength',
-        text: 'Sayfa Boyutu'
-      }
-    ],
-    pageLength: 25,
-    language: {
-      url: "https://cdn.datatables.net/plug-ins/1.13.4/i18n/tr.json"
-    }
-  });
-
-  // Kolon görünürlüklerini localStorage'a kaydet
-  table.on('column-visibility.dt', function () {
-    const visible = [];
-    table.columns().every(function (i) {
-      visible.push(this.visible());
-    });
-    localStorage.setItem('visibleColumns', JSON.stringify(visible));
-  });
-
-  // Kaydedilmiş kolon görünürlüklerini geri yükle
-  const saved = localStorage.getItem('visibleColumns');
-  if (saved) {
-    const visible = JSON.parse(saved);
-    table.columns().every(function (i) {
-      this.visible(visible[i] ?? true);
-    });
-  }
-});
-</script>
 {% endblock %}
